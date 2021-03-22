@@ -130,7 +130,7 @@ export class NewProduct extends React.Component<ProductProps, ProductState> {
       });
     }
 
-    window.location.href="/";
+    if(isValid==true) window.location.href="/";
   }
 
   displayFullAuthForm = (e) => {
