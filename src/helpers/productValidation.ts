@@ -1,45 +1,39 @@
-// import { NextFunction, Request, Response } from 'express';
-// // import Validator from 'validatorjs';
-// const Validator = require('validatorjs');
+// import Validator from 'validatorjs';
+const Validator = require('validatorjs');
 
-// export const ProductValidation: any = (req: Request, res: Response, next: NextFunction) => {
-//   const {
-//     name, discount_percent, price, gender, brand, attribute, quantity,
-//     description, pictures, seller_id, category_id, review,
-//   } = req.body;
+export const ProductValidation: any = (formBody) => {
+  const {
+    name, description, address, region, img,
+  } = formBody;
 
-//   const validation = new Validator(
-//     {
-//       name,
-//       discount_percent,
-//       price,
-//       gender,
-//       brand,
-//       quantity,
-//       description,
-//     },
-//     {
-//       name: 'required|string',
-//       discount_percent: 'required|string',
-//       price: 'required|string',
-//       gender: 'required|string',
-//       brand: 'required|string',
-//       quantity: 'required|string',
-//       description: 'required|string',
-//     }
-//   );
+  const validation = new Validator(
+    {
+      name, 
+      description, 
+      address, 
+      region, 
+      img, 
+    },
+    {
+      name: 'required|string',
+      description: 'required|string',
+      address: 'required|string',
+      region: 'required|string',
+      img: 'required|string',
+    }
+  );
 
-//   if (validation.passes()) {
-//     return next();
-//   }
-//   {
-//     const errors = validation.errors.all();
-//     return res.status(400).send({
-//       success: false,
-//       status: 400,
-//       error: errors,
-//     });
-//   }
-// };
+  if (validation.passes()) {
+    return true;
+  }
+  {
+    const errors = validation.errors.all();
+    return {
+      success: false,
+      status: 400,
+      error: errors,
+    };
+  }
+};
 
-// export default ProductValidation;
+export default ProductValidation;

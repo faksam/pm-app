@@ -3,7 +3,8 @@ import * as React from 'react';
 
 // third-party libraries
 import { connect } from 'react-redux';
-// import PaystackButton from 'react-paystack';
+import ProductValidation from '../../helpers/productValidation';
+
 import { createProduct } from '../../store/modules/products';
 
 // styles
@@ -95,21 +96,41 @@ export class NewProduct extends React.Component<ProductProps, ProductState> {
     e.preventDefault();
     let isValid;
     const {
-      displayFullAuth,
       productName,
       productAddress, 
       productImg,
       productDescription,
       productRegion } = this.state;
 
-      const { createProduct } = this.props;
-      createProduct({
+      isValid = ProductValidation({
         name: productName,
         address: productAddress, 
         img: productImg,
         description: productDescription,
-        region: productRegion,
-      })
+        region: productRegion
+      });
+
+      console.log(isValid);
+      const { createProduct } = this.props;
+      if(isValid==true) {
+        createProduct({
+          name: productName,
+          address: productAddress, 
+          img: productImg,
+          description: productDescription,
+          region: productRegion,
+        });
+      } else {
+        this.setState({
+          productDescriptionHelperText: (isValid.error.description ? isValid.error.description[0] : 'Please enter product description'),
+          productRegionHelperText: (isValid.error.region ? isValid.error.region[0] : 'Please the product your region'),
+          productNameHelperText: (isValid.error.name ? isValid.error.name[0] : 'Please the your product name'),
+          productAddressHelperText: (isValid.error.address ? isValid.error.address[0] : 'Please the the product address'),
+          productImgHelperText: (isValid.error.img ? isValid.error.img[0] : 'Please select product image'),
+      });
+    }
+
+    window.location.href="/";
   }
 
   displayFullAuthForm = (e) => {
