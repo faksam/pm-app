@@ -30,10 +30,6 @@ export default class UserInputValidation {
       }
     );
 
-    console.log('validation.passes()');
-    console.log('validation.passes(email, password)');
-    console.log(email, password);
-    console.log(validation.passes());
     if (validation.passes()) {
       return true;
     } else {

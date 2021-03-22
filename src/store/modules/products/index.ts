@@ -108,8 +108,6 @@ export const editProductSuccess = (product: Product): EditProductSuccess => ({
  * @returns {Function}
  */
 export const createProduct = (product: Product) => dispatch => {
-  console.log('in the createProduct');
-  console.log(product);
   axios.post(
   `${urlConfig.apiUrl}/products/`, product, urlConfig.options
 )
@@ -159,7 +157,6 @@ export const getProduct = productId => dispatch => axios.get(
   `${urlConfig.apiUrl}/products/${productId}`
 )
   .then((response) => {
-    console.log(response);
     
     dispatch(getProductSuccess(response.data.data));
   })
@@ -178,13 +175,11 @@ export const getProduct = productId => dispatch => axios.get(
  * @returns {Function}
  */
 export const getProducts = () => dispatch => {
-  console.log("in get products");
   
   return axios.get(
   `${urlConfig.apiUrl}/products`
 )
   .then(response => {
-    console.log(response.data);
     
     return dispatch(getProductsSuccess(response.data.products))
   })

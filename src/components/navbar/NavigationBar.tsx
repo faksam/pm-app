@@ -96,7 +96,7 @@ const NavigationBar = (props: NavigationBarProps) => {
                 <MenuItem><Button href="/">All products</Button></MenuItem>
                 <MenuItem><Button href="/products">Add product</Button></MenuItem>
                 <MenuItem onClick={handleClose}>My products</MenuItem>
-                <MenuItem onClick={signoutUser}>Logout</MenuItem>
+                <MenuItem onClick={() => { signoutUser(); window.location.reload(); }}>Logout</MenuItem>
               </Menu>
             </div>
           ): <MenuItem><Button href="/auth" style={{color: "white"}}>Login</Button></MenuItem>}

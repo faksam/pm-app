@@ -146,7 +146,7 @@ export class HomePage extends React.Component<ProductProps, ProductState> {
               <Divider />
               <DialogActions style={{ marginLeft: "auto", marginRight: "auto"  }}>
                 <Button onClick={this.onCloseModalView} color="primary">
-                  Cancel
+                  Close
                 </Button>
               </DialogActions>
             </Dialog>

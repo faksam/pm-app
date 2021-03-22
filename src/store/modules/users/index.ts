@@ -156,7 +156,6 @@ export const getUser = userId => dispatch => axios.get(
   `${urlConfig.apiUrl}/users/${userId}`
 )
   .then((response) => {
-    console.log(response);
     
     dispatch(getUserSuccess(response.data.data));
   })
@@ -175,13 +174,11 @@ export const getUser = userId => dispatch => axios.get(
  * @returns {Function}
  */
 export const getUsers = () => dispatch => {
-  console.log("in get users");
   
   return axios.get(
   `${urlConfig.apiUrl}/users`
 )
   .then(response => {
-    console.log(response);
     
     return dispatch(getUsersSuccess(response.data.data))
   })

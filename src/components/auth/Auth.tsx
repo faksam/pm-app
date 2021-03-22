@@ -14,6 +14,7 @@ import { signUpUser, signInUser } from '../../store/modules/auth';
 import {
   Button,
   Container,
+  Grid,
   TextField,
 } from '@material-ui/core';
 
@@ -80,14 +81,14 @@ export class HomePage extends React.Component<HomeProps, HomeState> {
     const {
       displayFullAuth,
       userName,
-      userAddress, 
+      userAddress,
       userPhone,
       userEmail,
       userPassword,
       userConfirmPassword,
       userRegion } = this.state;
 
-    if(displayFullAuth) {
+    if (displayFullAuth) {
       isValid = UserInputValidation.signUpInputValidation({
         name: userName,
         phone: userPhone,
@@ -99,10 +100,12 @@ export class HomePage extends React.Component<HomeProps, HomeState> {
       });
     } else {
       isValid = UserInputValidation.signInInputValidation({
+        email: userEmail,
+        password: userPassword,
       });
     }
 
-    if(isValid && displayFullAuth) {
+    if (isValid == true && displayFullAuth) {
       const { signUpUser } = this.props;
       signUpUser({
         name: userName,
@@ -113,21 +116,64 @@ export class HomePage extends React.Component<HomeProps, HomeState> {
         region: userRegion,
         address: userAddress,
       });
-    } else if(isValid && !displayFullAuth) {
+    } else if (isValid == true && !displayFullAuth) {
       const { signInUser } = this.props;
       signInUser({
         email: userEmail,
         password: userPassword,
       });
     }
-    // window.location.href = "/";
+    else {
+      if (displayFullAuth) {
+        this.setState({
+          userPasswordHelperText: (isValid.error.password ? isValid.error.password[0] : 'Please input your password'),
+          userRegionHelperText: (isValid.error.region ? isValid.error.region[0] : 'Please input your region'),
+          userNameHelperText: (isValid.error.name ? isValid.error.name[0] : 'Please input your fullname'),
+          userAddressHelperText: (isValid.error.address ? isValid.error.address[0] : 'Please input the delivery address'),
+          userEmailHelperText: (isValid.error.email ? isValid.error.email[0] : 'Please input your e-mail address'),
+          userConfirmPasswordHelperText: (isValid.error.password_confirmation ? isValid.error.password_confirmation[0] : 'Please confirm your password'),
+          errors: {
+            userPasswordError: (isValid.error.password ? true : false),
+            userRegionError: (isValid.error.region ? true : false),
+            userNameError: (isValid.error.name ? true : false),
+            userAddressError: (isValid.error.address ? true : false),
+            userEmailError: (isValid.error.email ? true : false),
+            userConfirmPasswordError: (isValid.error.password_confirmation ? true : false),
+          },
+        });
+      } else {
+        this.setState({
+          userPasswordHelperText: (isValid.error.password ? isValid.error.password[0] : 'Please input your password'),
+          userEmailHelperText: (isValid.error.email ? isValid.error.email[0] : 'Please input your e-mail address'),
+          errors: {
+            userPasswordError: (isValid.error.password ? true : false),
+            userEmailError: (isValid.error.email ? true : false),
+          },
+        });
+      }
+    }
   }
 
   displayFullAuthForm = (e) => {
     e.preventDefault();
 
     this.setState((prevState) => ({
-      displayFullAuth: !prevState.displayFullAuth
+      displayFullAuth: !prevState.displayFullAuth,
+      userEmailHelperText: 'Please input your e-mail address',
+      userAddressHelperText: 'Please input the delivery address',
+      userNameHelperText: 'Please input your fullname',
+      userRegionHelperText: 'Please input your region',
+      userPasswordHelperText: 'Please input your password',
+      userConfirmPasswordHelperText: 'Please confirm your password',
+      errors: {
+        userPhoneError: false,
+        userEmailError: false,
+        userAddressError: false,
+        userNameError: false,
+        userRegionError: false,
+        userPasswordError: false,
+        userConfirmPasswordError: false,
+      },
     }))
   }
 
@@ -135,7 +181,7 @@ export class HomePage extends React.Component<HomeProps, HomeState> {
     const {
       displayFullAuth,
       userName,
-      userAddress, 
+      userAddress,
       userPhone,
       userEmail,
       userPassword,
@@ -161,98 +207,101 @@ export class HomePage extends React.Component<HomeProps, HomeState> {
     return (
       <div className="home-page">
         <Container maxWidth="md">
-
-        <TextField
-            id="filled-select-currency"
-            error={errors.userEmailError}
-            label={userEmailLabel}
-            helperText={userEmailHelperText}
-            name="userEmail"
-            value={userEmail}
-            onChange={this.onChange}
-            placeholder="Email"
-            fullWidth
-            required={true}
-          ></TextField>
-          <TextField
-            id="filled-select-currency"
-            error={errors.userPasswordError}
-            label={userPasswordLabel}
-            helperText={userPasswordHelperText}
-            name="userPassword"
-            value={userPassword}
-            onChange={this.onChange}
-            placeholder="Password"
-            fullWidth
-            required={true}
-          ></TextField>
-          {displayFullAuth ?
-          (
-          <div><TextField
-            error={errors.userConfirmPasswordError}
-            id="filled-select-currency"
-            label={userConfirmPasswordLabel}
-            helperText={userConfirmPasswordHelperText}
-            name="userConfirmPassword"
-            value={userConfirmPassword}
-            onChange={this.onChange}
-            placeholder="Confirm Password"
-            fullWidth
-            required={true}
-          ></TextField>
-          <TextField
-            id="filled-select-currency"
-            error={errors.userNameError}
-            label={userNameLabel}
-            helperText={userNameHelperText}
-            name="userName"
-            value={userName}
-            onChange={this.onChange}
-            placeholder="Full Name"
-            fullWidth
-            required={true}
-          ></TextField>
-          <TextField
-            id="filled-select-currency"
-            error={errors.userPhoneError}
-            label={userPhoneLabel}
-            helperText={userPhoneHelperText}
-            name="userPhone"
-            value={userPhone}
-            onChange={this.onChange}
-            placeholder="Phone No"
-            fullWidth
-            required={true}
-          ></TextField>
-          <TextField
-            error={errors.userRegionError}
-            id="filled-select-currency"
-            label={userRegionLabel}
-            helperText={userRegionHelperText}
-            name="userRegion"
-            value={userRegion}
-            onChange={this.onChange}
-            placeholder="City/Region"
-            fullWidth
-            required={true}
-          ></TextField>
-          <TextField
-            error={errors.userAddressError}
-            id="filled-select-currency"
-            label={userAddressLabel}
-            helperText={userAddressHelperText}
-            name="userAddress"
-            value={userAddress}
-            onChange={this.onChange}
-            placeholder="Address"
-            fullWidth
-            required={true}
-          ></TextField></div>)
-          : null
-          }
-          <Button color="primary" size="medium" onClick={this.authClick}>{displayFullAuth? `Register` : `Login`}</Button>
-          <Button color="default" size="small" onClick={this.displayFullAuthForm} style={{float: "right"}}>{displayFullAuth? `Login Form` : `Register Form`}</Button>
-          
+          <Grid item xs={12} sm={12} md={6} lg={3} style={{paddingTop: "40px", marginRight: "auto", marginLeft: "auto"}}>
+            <h2>{displayFullAuth ? `Register` : `Login`}</h2>
+            <TextField
+              id="filled-email"
+              error={errors.userEmailError}
+              label={userEmailLabel}
+              helperText={userEmailHelperText}
+              name="userEmail"
+              value={userEmail}
+              onChange={this.onChange}
+              placeholder="Email"
+              fullWidth
+              required={true}
+            ></TextField>
+            <TextField
+              id="filled-password"
+              type="password"
+              error={errors.userPasswordError}
+              label={userPasswordLabel}
+              helperText={userPasswordHelperText}
+              name="userPassword"
+              value={userPassword}
+              onChange={this.onChange}
+              placeholder="Password"
+              fullWidth
+              required={true}
+            ></TextField>
+            {displayFullAuth ?
+              (
+                <div><TextField
+                  error={errors.userConfirmPasswordError}
+                  id="filled-ConfirmPassword"
+                  type="password"
+                  label={userConfirmPasswordLabel}
+                  helperText={userConfirmPasswordHelperText}
+                  name="userConfirmPassword"
+                  value={userConfirmPassword}
+                  onChange={this.onChange}
+                  placeholder="Confirm Password"
+                  fullWidth
+                  required={true}
+                ></TextField>
+                  <TextField
+                    id="filled-name"
+                    error={errors.userNameError}
+                    label={userNameLabel}
+                    helperText={userNameHelperText}
+                    name="userName"
+                    value={userName}
+                    onChange={this.onChange}
+                    placeholder="Full Name"
+                    fullWidth
+                    required={true}
+                  ></TextField>
+                  <TextField
+                    id="filled-phone"
+                    error={errors.userPhoneError}
+                    label={userPhoneLabel}
+                    helperText={userPhoneHelperText}
+                    name="userPhone"
+                    value={userPhone}
+                    onChange={this.onChange}
+                    placeholder="Phone No"
+                    fullWidth
+                    required={false}
+                  ></TextField>
+                  <TextField
+                    error={errors.userRegionError}
+                    id="filled-region"
+                    label={userRegionLabel}
+                    helperText={userRegionHelperText}
+                    name="userRegion"
+                    value={userRegion}
+                    onChange={this.onChange}
+                    placeholder="City/Region"
+                    fullWidth
+                    required={true}
+                  ></TextField>
+                  <TextField
+                    error={errors.userAddressError}
+                    id="filled-address"
+                    label={userAddressLabel}
+                    helperText={userAddressHelperText}
+                    name="userAddress"
+                    value={userAddress}
+                    onChange={this.onChange}
+                    placeholder="Address"
+                    fullWidth
+                    required={true}
+                  ></TextField></div>)
+              : null
+            }
+            <Button color="primary" size="medium" onClick={this.authClick}>{displayFullAuth ? `Register` : `Login`}</Button>
+            <Button color="default" size="small" onClick={this.displayFullAuthForm} style={{ float: "right" }}>{displayFullAuth ? `Login Form` : `Register Form`}</Button>
+          </Grid>
         </Container>
       </div>
     );

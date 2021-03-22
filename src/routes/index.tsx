@@ -12,15 +12,10 @@ import NewProduct from '../components/product/NewProduct';
 import { decodeToken } from '../helpers/authorize';
 
 const Routes = (props: any) => {
-  console.log("Routes props");
-  console.log(props);
   const { auth, signoutUser } = props;
 
   const decodedToken = decodeToken();
-  console.log(decodedToken)
-{/* <Route exact path="/">
-  {auth.isAuthenticated ? <Redirect to="/dashboard" /> : <PublicHomePage />}
-</Route> */}
+  
   return (
     <Router>
       <div className="container">

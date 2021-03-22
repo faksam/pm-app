@@ -8,7 +8,6 @@ const setAuthorizationToken = () => {
     if (token) {
       config.headers.authorization = `Bearer ${token}`;
     }
-    console.log('config.headers', config.headers)
 
     return config;
   }, err => (Promise.reject(err)));

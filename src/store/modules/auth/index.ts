@@ -31,7 +31,6 @@ export const signoutCurrentUser = () => ({
 
 export const signInUser = userDetails => dispatch => { 
 
-  console.log(userDetails);
   axios.post(
   `${urlConfig.apiUrl}/auth/login`, userDetails, urlConfig.options
 )
@@ -40,8 +39,6 @@ export const signInUser = userDetails => dispatch => {
     dispatch(setCurrentUser(response.data));
   })
   .catch((error) => {
-    console.log(error);
-    console.log(error.response);
     dispatch(setCurrentUserError(error.response.data));
   });
 }
@@ -62,7 +59,6 @@ export const signoutUser = () => (dispatch) => {
  */
 export const signUpUser = userDetails => dispatch => { 
 
-  console.log(userDetails);
   axios.post(
   `${urlConfig.apiUrl}/auth/signup`, userDetails, urlConfig.options
 )
@@ -71,8 +67,6 @@ export const signUpUser = userDetails => dispatch => {
     dispatch(setCurrentUser(response.data));
   })
   .catch((error) => {
-    console.log(error)
-    console.log(error.response)
     dispatch(setCurrentUserError(error.response));
   });
 }
@@ -100,7 +94,6 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_CURRENT_USER:
-      console.log('in set current user', action);
       return {
         ...state,
         isAuthenticated: true,
