@@ -207,7 +207,7 @@ export class HomePage extends React.Component<HomeProps, HomeState> {
     return (
       <div className="home-page">
         <Container maxWidth="md">
-          <Grid item xs={12} sm={12} md={6} lg={3} style={{paddingTop: "40px", marginRight: "auto", marginLeft: "auto"}}>
+          <Grid item xs={12} sm={12} md={6} lg={6} style={{paddingTop: "40px", marginRight: "auto", marginLeft: "auto"}}>
             <h2>{displayFullAuth ? `Register` : `Login`}</h2>
             <TextField
               id="filled-email"
