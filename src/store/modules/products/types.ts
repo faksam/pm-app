@@ -1,0 +1,17 @@
+export const GET_PRODUCTS_SUCCESS = 'pm-app/products/GET_PRODUCTS_SUCCESS';
+export type GET_PRODUCTS_SUCCESS = typeof GET_PRODUCTS_SUCCESS;
+
+export const PRODUCTS_ERROR = 'pm-app/products/PRODUCTS_ERROR';
+export type PRODUCTS_ERROR = typeof PRODUCTS_ERROR;
+
+export const DELETE_PRODUCT_SUCCESS = 'pm-app/products/DELETE_PRODUCT_SUCCESS';
+export type DELETE_PRODUCT_SUCCESS = typeof DELETE_PRODUCT_SUCCESS;
+
+export const GET_PRODUCT_SUCCESS = 'pm-app/products/GET_PRODUCT_SUCCESS';
+export type GET_PRODUCT_SUCCESS = typeof GET_PRODUCT_SUCCESS;
+
+export const CREATE_PRODUCT_SUCCESS = 'pm-app/products/CREATE_PRODUCT_SUCCESS ';
+export type CREATE_PRODUCT_SUCCESS  = typeof CREATE_PRODUCT_SUCCESS ;
+
+export const EDIT_PRODUCT_SUCCESS = 'pm-app/products/EDIT_PRODUCT_SUCCESS';
+export type EDIT_PRODUCT_SUCCESS  = typeof EDIT_PRODUCT_SUCCESS;
