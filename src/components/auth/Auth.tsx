@@ -61,8 +61,7 @@ export class HomePage extends React.Component<HomeProps, HomeState> {
   state = this.initialState;
 
   componentDidMount() {
-    // this.props.getFaceMasks();
-
+    console.log(this.props)
   }
 
 

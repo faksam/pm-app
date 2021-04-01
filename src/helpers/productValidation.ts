@@ -6,6 +6,7 @@ export const ProductValidation: any = (formBody) => {
     name, description, address, region, img,
   } = formBody;
 
+  console.log(img);
   const validation = new Validator(
     {
       name, 
@@ -19,7 +20,7 @@ export const ProductValidation: any = (formBody) => {
       description: 'required|string',
       address: 'required|string',
       region: 'required|string',
-      img: 'required|string',
+      img: 'required|numeric|min:1',
     }
   );
 

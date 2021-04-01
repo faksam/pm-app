@@ -30,7 +30,7 @@ export const signoutCurrentUser = () => ({
 
 
 export const signInUser = userDetails => dispatch => { 
-
+  console.log(userDetails)
   axios.post(
   `${urlConfig.apiUrl}/auth/login`, userDetails, urlConfig.options
 )

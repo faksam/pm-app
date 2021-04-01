@@ -4,47 +4,18 @@ import * as React from 'react';
 // third-party libraries
 import { connect } from 'react-redux';
 import ProductValidation from '../../helpers/productValidation';
+import { storage } from "../../helpers/firebaseConf";
 
 import { createProduct } from '../../store/modules/products';
 
 // styles
 
 // components
-// import Carousel from 'react-material-ui-carousel';
 import {
   Button,
-  Paper,
-  Divider,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardMedia,
-  Modal,
-  Typography,
-  IconButton,
-  InputAdornment,
-  Grid,
-  MenuItem,
-  Fab,
   Container,
   TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
 } from '@material-ui/core';
-
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import AddCircleIcon  from '@material-ui/icons/AddCircle';
-import CloseIcon from '@material-ui/icons/Close';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 // interfaces
 import { ProductProps, ProductState } from './interfaces';
@@ -59,7 +30,8 @@ export class NewProduct extends React.Component<ProductProps, ProductState> {
       productRegionError: false,
       productImgError: false,
     },
-    productImg: '',
+    productImg: null,
+    productImgUrl: [],
     productDescription: '',
     productAddress: '',
     productRegion: '',
@@ -84,39 +56,74 @@ export class NewProduct extends React.Component<ProductProps, ProductState> {
 
 
   onChange = (event) => {
-    const { errors } = this.state;
-
     this.setState({
       [event.target.name]: event.target.value
     });
     event.preventDefault();
   }
 
-  addNewProduct = (e) => {
+  onFileChange = (event) => {
+    const files = event.target.files;
+    this.setState({ 
+      productImg: files,
+      productImgHelperText: `${files.length} image(s)`,
+     });
+      
+    event.preventDefault();
+  }
+
+   addNewProduct = (e) => {
     e.preventDefault();
     let isValid;
     const {
       productName,
       productAddress, 
       productImg,
+      productImgUrl,
       productDescription,
       productRegion } = this.state;
 
+      const { createProduct } = this.props;
+
+      let imgCount = 0;
+      if(productImg && productImg.length > 0) {
+        console.log('in product image uploader');
+        for (const imgFile of productImg) {
+          imgCount++;
+          const uploadTask = storage.ref(`/images/${productName+imgCount}`).put(imgFile);
+          uploadTask.on('state_changed', 
+            (snapShot) => {
+              //takes a snap shot of the process as it is happening
+              console.log(snapShot)
+            }, (err) => {
+              //catches the errors
+              console.log(err)
+            }, () => {
+              // gets the functions from storage refences the image storage in firebase by the children
+              // gets the download url then sets the image from firebase as the value for the imgUrl key:
+              storage.ref('images/').child(productName+imgCount).getDownloadURL()
+              .then(fireBaseUrl => {
+                this.setState((prevState) => ({ productImgUrl: [...prevState.productImgUrl, fireBaseUrl] 
+                }));
+                // setImageAsUrl(prevObject => ({...prevObject, imgUrl: fireBaseUrl}))
+              })
+            });
+        };
+      }
       isValid = ProductValidation({
         name: productName,
         address: productAddress, 
-        img: productImg,
+        img: productImgUrl.length || 0,
         description: productDescription,
         region: productRegion
       });
 
       console.log(isValid);
-      const { createProduct } = this.props;
       if(isValid==true) {
         createProduct({
           name: productName,
           address: productAddress, 
-          img: productImg,
+          img: productImgUrl,
           description: productDescription,
           region: productRegion,
         });
@@ -143,11 +150,11 @@ export class NewProduct extends React.Component<ProductProps, ProductState> {
 
   render() {
     const {
-      displayFullAuth,
       productName,
       productAddress, 
       productDescription,
       productImg,
+      productImgUrl,
       productRegion,
       errors,
       productAddressHelperText,
@@ -165,19 +172,6 @@ export class NewProduct extends React.Component<ProductProps, ProductState> {
     return (
       <div className="new-product">
         <Container maxWidth="md">
-
-          <TextField
-            id="filled-select-currency"
-            error={errors.productImgError}
-            label={productImgLabel}
-            helperText={productImgHelperText}
-            name="productImg"
-            value={productImg}
-            onChange={this.onChange}
-            placeholder="Img"
-            fullWidth
-            required={true}
-          ></TextField>
           <TextField
             id="filled-select-currency"
             error={errors.productNameError}
@@ -226,7 +220,34 @@ export class NewProduct extends React.Component<ProductProps, ProductState> {
             fullWidth
             required={true}
           ></TextField>
-          <Button color="primary" onClick={this.addNewProduct}>Save</Button>
+          <div>
+            <TextField
+              id="filled-select-currency"
+              error={errors.productImgError}
+              label={productImgLabel}
+              helperText={productImgHelperText}
+              name="productImg"
+              value={productImgUrl.toString()}
+              placeholder="Img"
+              disabled
+            ></TextField>
+            <input
+              accept="image/*"
+              id="contained-button-file"
+              multiple
+              type="file"
+              placeholder="Product Images"
+              style={{display: "none"}}
+              name="productImg" 
+              onChange={this.onFileChange}
+            />
+            <label htmlFor="contained-button-file">
+              <Button color="primary" component="span" style={{marginTop: "10px"}}>
+                Upload
+              </Button>
+            </label>
+          </div>
+          <Button variant="contained" color="primary" onClick={this.addNewProduct}>Save</Button>
         </Container>
       </div>
     );

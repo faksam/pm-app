@@ -8,50 +8,31 @@ import { connect } from 'react-redux';
 import './HomePage.scss';
 
 // components
-import ProductDetails from "../../components/product/ProductDetails";
 
 // import Carousel from 'react-material-ui-carousel';
 import {
   Button,
-  Paper,
   Divider,
   Card,
   CardActionArea,
   CardActions,
   CardMedia,
-  Modal,
-  Typography,
-  IconButton,
-  InputAdornment,
   Grid,
-  MenuItem,
-  Fab,
   Container,
-  TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
+  TextField,
 } from '@material-ui/core';
 
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
-import AddCircleIcon  from '@material-ui/icons/AddCircle';
-import CloseIcon from '@material-ui/icons/Close';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 
 // interfaces
 import { ProductProps, ProductState } from './interfaces';
  
 // helper functions
-import { getProducts } from '../../store/modules/products';
+import { getProducts, productError } from '../../store/modules/products';
 
 // fixtures
 
@@ -59,6 +40,7 @@ export class HomePage extends React.Component<ProductProps, ProductState> {
 
   initialState = {
     product: {
+      _id: '',
       name: '',
       address: '',
       img: '',
@@ -72,6 +54,7 @@ export class HomePage extends React.Component<ProductProps, ProductState> {
 
   componentDidMount() {
     this.props.getProducts();
+    console.log(this.props)
   }
 
   onClickQuickView = (product) => (e) => {
@@ -90,11 +73,6 @@ export class HomePage extends React.Component<ProductProps, ProductState> {
   }
 
   render() {
-
-    const {
-
-    } = this.state;
-
     return (
       <div className="home-page">
         <Container maxWidth="md">
@@ -111,7 +89,7 @@ export class HomePage extends React.Component<ProductProps, ProductState> {
                 <CardActionArea>
                   <CardMedia
                     className="" style={{ height: 240 }}
-                    image={product.img}
+                    image={product.img[0]}
                     title={product.name}
                     onClick={this.onClickQuickView(product)}
                   /> 
@@ -131,11 +109,11 @@ export class HomePage extends React.Component<ProductProps, ProductState> {
               <br/>
               <DialogContent style={{}}>
                 <Grid>
-                  <Card className="" style={{ maxWidth: 400, marginLeft: "auto", marginRight: "auto"  }}>
+                  <Card className="" style={{ maxWidth: 420, marginLeft: "auto", marginRight: "auto"  }}>
                     <CardActionArea>
                       <CardMedia
-                        className="" style={{ height: 400}}
-                        image={this.state.product.img}
+                        className="" style={{ height: 400, width: 420}}
+                        image={this.state.product.img[0]}
                         title={this.state.product.description}
                       />
                     </CardActionArea>
@@ -148,6 +126,7 @@ export class HomePage extends React.Component<ProductProps, ProductState> {
                 <Button onClick={this.onCloseModalView} color="primary">
                   Close
                 </Button>
+                {this.props.auth.isAuthenticated ? <Button color="primary" href={`/products/`+this.state.product._id} >View</Button>: null}
               </DialogActions>
             </Dialog>
     
@@ -160,6 +139,7 @@ export class HomePage extends React.Component<ProductProps, ProductState> {
 
 export const mapStateToProps = state => ({
   products: state.products.data,
+  auth: state.auth,
 });
 
 export const mapDispatchToProps = dispatch => ({

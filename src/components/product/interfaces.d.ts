@@ -5,11 +5,7 @@ export interface ProductState {
 
 export interface ProductProps {
   createProduct: (product: Product) => Promise<any>;
+  getProduct: (productId: string) => Promise<any>;
+  [key: string]: any;
   product: Product;
-  match: {
-    url: string;
-  };
-  location: {
-    pathname: string;
-  };
 }

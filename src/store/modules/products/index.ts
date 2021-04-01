@@ -147,18 +147,21 @@ export const deleteProduct = productId => dispatch => axios.delete(
   /**
  * Thunk
  *
- * Delete product thunk
+ * Get product thunk
  *
  * @param {string} productId
  *
  * @returns {Function}
  */
-export const getProduct = productId => dispatch => axios.get(
+export const getProduct = productId => dispatch => {
+  console.log('in get product');
+  console.log(productId);
+  axios.get(
   `${urlConfig.apiUrl}/products/${productId}`
 )
-  .then((response) => {
-    
-    dispatch(getProductSuccess(response.data.data));
+  .then((response) => {  
+    console.log(response.data.product);
+    dispatch(getProductSuccess(response.data.product));
   })
   .catch((error) =>
     dispatch(productError({
@@ -166,7 +169,7 @@ export const getProduct = productId => dispatch => axios.get(
       data: error.response.data
     }))
   );
-
+  }
 /**
  * Thunk
  *
@@ -254,6 +257,7 @@ const reducer = (state = productInitialState, action) => {
     case GET_PRODUCT_SUCCESS:
       return {
         ...state,
+        data: action.product,
         isLoading: action.isLoading,
       };
     case GET_PRODUCTS_SUCCESS:
